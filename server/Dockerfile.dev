@@ -1,0 +1,21 @@
+FROM python:3.9
+
+WORKDIR /usr/src/app/server
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+RUN pip install --upgrade pip
+
+# Using pipenv for dependencies installation and managament
+RUN pip install pipenv
+
+COPY Pipfile* ./
+
+# We use the --system flag so packages are installed into the system python
+# and not into a virtualenv. Docker containers don't need virtual environments. 
+RUN pipenv install --system --dev
+
+COPY . .
+
+EXPOSE 8000
